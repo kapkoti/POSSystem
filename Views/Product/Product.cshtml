@@ -1,0 +1,197 @@
+﻿@model POSSystem.Models.UserRegistrationVM
+@{
+    Layout = "~/Views/Shared/AdminMaster.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Product</title>
+
+
+    <script>
+        $(function () {
+            $("#btn_save").click(function () {
+
+                debugger;
+                var ProductDAL = new Object();
+                ProductDAL.productname = $('#txt_product').val();
+                ProductDAL.price = $('#txt_price').val();
+                ProductDAL.Categoryname = $('#ddlcategory').val();
+                ProductDAL.description = $('#txt_description').val();
+                ProductDAL.Stockstatus = $('#rbtn_stock_yes').val();
+                ProductDAL.quantity = $('#txt_Product_quantity').val();
+                ProductDAL.action = "Insert";
+
+
+               // ProductDAL.image_path = $("#file").get(0);
+             
+                $.ajax({
+                    type: 'Post',
+                    url: '/Product/AddProduct',
+                    dataType: 'json',
+                   // data: fileData,
+                    data: { P_productname: ProductDAL.productname, P_price: ProductDAL.price, P_Categoryname: ProductDAL.Categoryname, P_description: ProductDAL.description, P_Stockstatus: ProductDAL.Stockstatus, P_image_path: ProductDAL.image_path, P_Action: ProductDAL.action, P_Quantity: ProductDAL.quantity},
+                    success: function (response) {
+
+                    },
+                    error: function (response) {
+
+                    }
+                });
+
+            });
+
+
+        })
+
+    </script>
+
+
+</head>
+<body>
+
+    <div class="modal fade" id="modal-default">
+        <div class="modal-dialog" style="width:60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Product</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="col-md-3">Category</div>
+                                    <div class="col-md-3">
+                                        @Html.DropDownList("FruitId", new SelectList(ViewBag.Category, "id", "Categoryname"), "Please select", new { @id = "ddlcategory", @class = "form-control", style = "width:156px" })
+
+
+                                        @*<select class="form-control">
+                                                <option value="volvo">Volvo</option>
+                                                <option value="saab">Saab</option>
+                                                <option value="mercedes">Mercedes</option>
+                                                <option value="audi">Audi</option>
+                                            </select>*@
+                                    </div>
+
+                                    <div class="col-md-3">Product Name</div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="txt_product" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-12"><br /></div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">Price</div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="txt_price" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-3">InStock</div>
+                                    <div class="col-md-3">
+                                        <input type="radio" id="rbtn_stock_yes" name="stock" value="yes" checked> Yes
+                                        <input type="radio" id="rbtn_stock_no" name="stock" value="no"> No
+                                    </div>
+                                </div>
+                                <div class="col-md-12"><br /></div>
+                                <div class="col-md-12">
+                                    <div class="col-md-3">Description</div>
+                                    <div class="col-md-9">
+                                        <textarea rows="4" cols="50" id="txt_description" class="form-control"></textarea>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12"><br /></div>
+                                <div class="col-md-12">
+
+                                    <div class="col-md-3">Product Quantity</div>
+                                    <div class="col-md-3">
+                                        <input type="text" id="txt_Product_quantity" class="form-control"><br />
+                                        @*<input type="file" id="file" /><br />*@
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                    <input type="button" id="btn_save" class="btn btn-primary" value="Save" />
+
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <section class="content-header">
+        <h1>
+            Product
+            <small>Add Products</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Manage Products</li>
+        </ol>
+    </section>
+
+
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
+                    Add Products
+                </button>
+
+            </div>
+
+        </div>
+
+        <br />
+
+
+
+
+
+    </section>
+
+
+
+    <script>
+        var UploadImage = function () {
+
+            debugger;
+            var file = $("#SelectImage").get(0).files;
+            var data = new FormData;
+            data.append("ImageFile", file[0]);
+            $.ajax({
+                type: "POST",
+                url: "/Product/ImageUpload",
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (imgID) {
+                    $("#UploadedImage").append('<img src="/Home/DisplayingImage?imgID=' + imgID + '"class=img-responsive  thimbnail"/>');
+                }
+            })
+        }
+
+    </script>
+
+</body>
+</html>

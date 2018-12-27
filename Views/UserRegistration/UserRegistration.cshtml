@@ -1,0 +1,209 @@
+﻿@using GridMvc.Html
+@model POSSystem.Models.UserRegistrationVM
+@using POSSystem.Models;
+
+@{
+    Layout = "~/Views/Shared/AdminMaster.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UserRegistration</title>
+    <script src="~/Scripts/UserRegistration.js"></script>
+  
+  
+</head>
+<body>
+
+    <div>
+
+
+        <form action="~/UserRegistration/Submit" method="post">
+            <div class="modal fade" id="modal-default">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">User Registration</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" id="txt_name" name="txt_name">
+                                        </div>
+                                        <!-- /.form-group -->
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            <input type="text" class="form-control" id="txt_phone" name="txt_phone">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Email ID</label>
+                                            <input type="text" class="form-control" id="txt_email" name="txt_email">
+                                        </div>
+                                        <!-- /.form-group -->
+                                        <div class="form-group">
+                                            <label>User Name</label>
+                                            <input type="text" class="form-control" id="txt_username" name="txt_username">
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                    <!-- /.col -->
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input type="text" class="form-control" id="txt_password" name="txt_password">
+                                        </div>
+                                        <!-- /.form-group -->
+                                        <div class="form-group">
+
+                                        </div>
+                                        <!-- /.form-group -->
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                            @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                            <input type="submit" name="btn_submit" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
+        </form>
+
+
+        <section class="content-header">
+            <h1>
+                User Registration
+                <small>Manage Users</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">User Registration</li>
+            </ol>
+        </section>
+
+
+        <section class="content">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
+                       Add Users
+                    </button>
+
+                </div>
+
+            </div>
+
+            <br />
+
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">User List</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>User Name</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (UserRegistrationModel o in Model.objregistration2)
+    {
+                            <tr>
+                                <td>@o.name</td>
+                                <td>@o.phone</td>
+                                <td>@o.email</td>
+                                <td>@o.userName</td>
+                                <td>
+                                    <a href="#" onclick="return getbyID(@o.id)">Update</a>
+                                 
+                                </td>
+                                <td>
+                                  
+                                    <a href="#" onclick="return getbyID('+' @o.id '+')">Delete</a>
+                                </td>
+                                    @*<a href="#">Delete</a>*@
+                               
+                            </tr>
+}
+                            
+
+
+
+
+
+                        </tbody>
+
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+
+            <br/>
+
+                
+
+            @*@Html.Grid(Model).Columns(columns =>
+                          {
+                              columns.Add(c => c.objregistration.name).Titled("Name");
+                              columns.Add(c => c.objregistration.phone).Titled("Phone").Filterable(true);
+                              columns.Add(c => c.objregistration.email).Titled("Email");
+                              columns.Add(c => c.objregistration.userName).Titled("User Name");
+                          }).WithPaging(3).Sortable(true)*@
+
+
+        </section>
+
+
+
+
+        @*<h2>User Registration</h2> <br />
+                Name : <input type="text" name="txt_name" /> <br />
+                Phone No : <input type="text" name="txt_phone" /> <br />
+                Email Id : <input type="text" name="txt_email" /> <br />
+                User Name : <input type="text" name="txt_username" /> <br />
+                Password : <input type="text" name="txt_password" /> <br />
+                <input type="submit" name="btn_submit" /> <br />
+
+            </form>*@
+
+
+
+
+    </div>
+
+
+
+
+
+
+</body>
+</html>

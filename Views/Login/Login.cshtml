@@ -1,0 +1,121 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+@*<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Login</title>
+    </head>
+    <body>
+        <div>
+
+            <form action="Login/Login" method="post">
+
+
+                <h2>User Login</h2> <br />
+                User Name - <input type="text" name="txt_username" id="txt_username" /> <br />
+                Password  - <input type="text" name="txt_pwd" id="txt_pwd" /> <br />
+
+                <input type="submit" name="btn_login" id="btn_login" />
+
+
+
+            </form>
+        </div>
+    </body>
+    </html>*@
+
+
+
+
+<html>
+<head>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <link href="~/App_Start/css/login.css" rel="stylesheet" />
+
+    <!------ Include the above in your HEAD tag ---------->
+</head>
+<body id="LoginForm">
+    <div class="container">
+        <h1 class="form-heading"></h1>
+        <div class="login-form">
+            <div class="main-div">
+                <div class="panel">
+                    <h2>Admin Login</h2>
+                    <p>Please enter your email and password</p>
+                </div>
+
+
+
+                <form id="Login">
+                    <div class="form-group">
+
+
+
+                        <input type="text" class="form-control" name="txt_username" id="txt_username" placeholder="User Name">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="txt_pwd" id="txt_pwd" placeholder="Password">
+                    </div>
+                    <div class="forgot">
+                        <a href="reset.html">Forgot password?</a>
+                    </div>
+                    @*<button type="submit" class="btn btn-primary">Login</button>*@
+                    <input type="submit" name="btn_login" class="btn btn-primary" id="btn_login" />
+                </form>
+            </div>
+            <p class="botto-text"> Designed by Bhagwant</p>
+        </div>
+    </div></div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            debugger;
+            $("#btn_login").click(function (e)
+            {
+                if ($("#txt_username").val() == "")
+                    alert("Username cannot be empty");
+                else if ($("#txt_pwd").val() == "")
+                    alert("Password cannot be empty");
+                else {
+                    alert("called")
+                    $.ajax({
+                        type: "POST",
+                        url: "/Login/submitlogin",
+                        contentType: "application/json; charset=utf-8",
+                        data: '{"username":"' + $("#txt_username").val() + '","pwd":"' + $("#txt_pwd").val() + '"}',
+                        dataType: "html",
+                        
+                        success: function (result, status, xhr) {
+                            //  $("#dataDiv").html(result);
+                            alert("called 2");
+                            window.location.href = '@Url.Action("Dashboard", "Dashboard")';
+                           // alert("success");
+                        },
+                        error: function (xhr, status, error) {
+                            $("#dataDiv").html("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText)
+                        }
+                    });
+                }
+                return false;
+            });
+        });
+
+       
+
+    </script>
+
+</body>
+</html>

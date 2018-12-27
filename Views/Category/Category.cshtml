@@ -1,0 +1,295 @@
+﻿@model POSSystem.Models.UserRegistrationVM
+@{
+    Layout = "~/Views/Shared/AdminMaster.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Category</title>
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+          
+            $("#btn_save").click(function () {
+                debugger;
+                var CategoryDal = new Object();
+                CategoryDal.Categoryname = $('#txt_categoryname').val();
+                // CategoryDal.MenuName = "aaa";
+                // CategoryDal.menu_path = "www.google.com";
+
+                if (CategoryDal != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Category/AddCategory",
+                        data: JSON.stringify(CategoryDal),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+
+                            $('#btn_save').val("Save");
+                            $('#modal-default').modal('hide');
+                            location.reload();
+                            if (response != null) {
+                                //alert("Name : " + response.Categoryname);
+                            } else {
+                                alert("Something went wrong");
+                            }
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+
+
+    <script type="text/javascript">
+
+ 
+        function editcategory(id) {
+            debugger;
+            $.ajax({
+                url: '/Category/updateCategory', type: "GET", dataType: "json",
+                data: { id: id },
+                success: function (data) {
+                    $('#btn_save').val("Update");
+                    $('#modal-default').modal('show');
+                    $('#txt_categoryname').val(data)
+                    debugger;
+                },
+                error: function (xhr) {
+                   // alert('error');
+                }
+            });
+           
+        }
+
+        function deletecategory(id) {
+            $.ajax({
+                url: '/Category/DeleteCateogry',
+                type: "GET",
+                dataType: "json",
+                data: { id: id },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+
+        }
+    </script>
+
+
+  
+</head>
+<body>
+
+
+
+
+
+    <form action="~/UserRegistration/Submit" method="post">
+        <div class="modal fade" id="modal-default">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Category</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Category Name</label>
+                                        <input type="text" id="txt_categoryname" class="form-control" >
+
+                                    </div>
+                                    <!-- /.form-group -->
+                                    <!-- /.form-group -->
+                                </div>
+                                <!-- /.col -->
+                                <!-- /.col -->
+
+
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                        @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                        <input type="button" id="btn_save" class="btn btn-primary" value="Save" />
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </form>
+
+
+
+
+
+
+    <section class="content-header">
+        <h1>
+            Category
+            <small>Create Category</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Manage Category</li>
+        </ol>
+    </section>
+
+
+    <section class="content">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-default">
+                    Create Category
+                </button>
+
+            </div>
+
+        </div>
+
+        <br />
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Category List</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                @{ 
+                    var grid = new WebGrid(Model.objcategory, canPage: true, canSort: true, rowsPerPage: 10);
+                    grid.Pager(WebGridPagerModes.NextPrevious);
+
+                }
+                @grid.GetHtml(tableStyle: "table table - bordered table - hover",
+                columns:grid.Columns(
+
+                grid.Column("Categoryname","Category"),
+                 //grid.Column("id", "menu id"),
+                 grid.Column(format:@<text> <a href="#" onclick="editcategory('@item.id')">Edit</a> </text>),
+                    grid.Column(format:@<text> <a href="#" onclick="deletecategory('@item.id')">Delete</a>  </text>)
+               ))
+
+                @*<table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Rendering engine</th>
+                            <th>Browser</th>
+                            <th>Platform(s)</th>
+                            <th>Engine version</th>
+                            <th>CSS grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Trident</td>
+                            <td>
+                                Internet
+                                Explorer 4.0
+                            </td>
+                            <td>Win 95+</td>
+                            <td> 4</td>
+                            <td>X</td>
+                        </tr>
+                        <tr>
+                            <td>Trident</td>
+                            <td>
+                                Internet
+                                Explorer 5.0
+                            </td>
+                            <td>Win 95+</td>
+                            <td>5</td>
+                            <td>C</td>
+                        </tr>
+                        <tr>
+                            <td>Trident</td>
+                            <td>
+                                Internet
+                                Explorer 5.5
+                            </td>
+                            <td>Win 95+</td>
+                            <td>5.5</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Trident</td>
+                            <td>
+                                Internet
+                                Explorer 6
+                            </td>
+                            <td>Win 98+</td>
+                            <td>6</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Trident</td>
+                            <td>Internet Explorer 7</td>
+                            <td>Win XP SP2+</td>
+                            <td>7</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Trident</td>
+                            <td>AOL browser (AOL desktop)</td>
+                            <td>Win XP</td>
+                            <td>6</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Gecko</td>
+                            <td>Firefox 1.0</td>
+                            <td>Win 98+ / OSX.2+</td>
+                            <td>1.7</td>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <td>Gecko</td>
+                            <td>Firefox 1.5</td>
+                            <td>Win 98+ / OSX.2+</td>
+                            <td>1.8</td>
+                            <td>A</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>*@
+            </div>
+            <!-- /.box-body -->
+        </div>
+
+
+   
+    </section>
+
+
+
+
+
+
+
+
+</body>
+</html>
